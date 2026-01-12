@@ -1,0 +1,175 @@
+---
+const web3formsKey = import.meta.env.PUBLIC_WEB3FORMS_KEY || 'YOUR_ACCESS_KEY_HERE';
+---
+<section id="contact" class="py-32 px-6 bg-white text-gray-900 border-t border-black/5" data-header-theme="light">
+  <div class="container mx-auto max-w-5xl">
+    <div class="mb-20">
+      <h2 class="text-5xl font-black mb-4 tracking-tighter uppercase font-display text-black">
+        ¿TIENES UN <span class="text-neon-primary">DESAFÍO?</span>
+      </h2>
+      <div class="w-20 h-1 bg-neon-primary mb-6"></div>
+      <p class="text-xl text-gray-600 font-medium whitespace-pre-line">Hablemos de cómo llevar tu evento al siguiente nivel.</p>
+    </div>
+
+    <form id="contact-form" action="https://api.web3forms.com/submit" method="POST" class="bg-[#f9f9fb] p-10 md:p-16 rounded-sm border border-black/5 relative overflow-hidden shadow-xl">
+      <!-- Web3Forms Config -->
+      <input type="hidden" name="access_key" value={web3formsKey}>
+      <input type="hidden" name="from_name" value="House of Ravers Contact Form">
+      <input type="hidden" name="subject" value="Nuevo contacto desde la web">
+      <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
+
+      <!-- Decor overlay -->
+      <div class="absolute top-0 right-0 w-32 h-32 bg-neon-primary/10 blur-3xl rounded-full"></div>
+      
+      <!-- Quick Contact Info -->
+      <div class="flex flex-col sm:flex-row gap-6 mb-12 pb-12 border-b border-black/5">
+        <a href="mailto:contacto@houseofravers.cl" class="flex items-center gap-3 group/link">
+          <div class="w-10 h-10 rounded-full bg-black flex items-center justify-center text-white group-hover/link:bg-neon-primary group-hover/link:text-black transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-[10px] font-black uppercase tracking-[0.2em] text-black/40">Email</span>
+            <span class="text-sm font-bold text-black group-hover/link:text-neon-primary transition-colors">contacto@houseofravers.cl</span>
+          </div>
+        </a>
+        
+        <a href="tel:+56990485341" class="flex items-center gap-3 group/link">
+          <div class="w-10 h-10 rounded-full bg-black flex items-center justify-center text-white group-hover/link:bg-neon-primary group-hover/link:text-black transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-[10px] font-black uppercase tracking-[0.2em] text-black/40">Teléfono</span>
+            <span class="text-sm font-bold text-black group-hover/link:text-neon-primary transition-colors">+569 9048 5341</span>
+          </div>
+        </a>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-10">
+         <div>
+            <label for="name" class="block text-[10px] font-black text-black/60 uppercase tracking-[0.2em] mb-3">Nombre Completo</label>
+            <input type="text" id="name" name="name" minlength="3" class="w-full px-0 py-4 bg-transparent border-b border-black/20 text-black focus:border-neon-primary focus:outline-none transition-all placeholder:text-black/40 font-medium" placeholder="EJ: JUAN PÉREZ" required />
+         </div>
+         <div>
+            <label for="email" class="block text-[10px] font-black text-black/60 uppercase tracking-[0.2em] mb-3">Email Corporativo</label>
+            <input type="email" id="email" name="email" class="w-full px-0 py-4 bg-transparent border-b border-black/20 text-black focus:border-neon-primary focus:outline-none transition-all placeholder:text-black/40 font-medium" placeholder="JUAN@EMPRESA.CL" required />
+         </div>
+      </div>
+      
+      <div class="mb-10">
+         <label for="type" class="block text-[10px] font-black text-black/60 uppercase tracking-[0.2em] mb-3">Naturaleza del Evento</label>
+         <div class="relative group">
+            <select id="type" name="type" class="w-full px-0 py-4 bg-transparent border-b border-black/20 text-black focus:border-neon-primary focus:outline-none transition-all font-medium appearance-none pr-10 cursor-pointer" required>
+               <option value="" disabled selected class="text-black/30 bg-white">Selecciona el tipo de evento...</option>
+               <option value="corporate" class="bg-white text-black">Lanzamiento Corporativo / Congreso</option>
+               <option value="social" class="bg-white text-black">Producción Social / Privado</option>
+               <option value="concert" class="bg-white text-black">Festival / Concierto Inmersivo</option>
+               <option value="other" class="bg-white text-black">Otras Experiencias</option>
+            </select>
+            <div class="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none text-black/40 group-hover:text-neon-primary transition-colors">
+               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m6 9 6 6 6-6"/>
+               </svg>
+            </div>
+         </div>
+      </div>
+
+      <div class="mb-12">
+        <label for="message" class="block text-[10px] font-black text-black/60 uppercase tracking-[0.2em] mb-3">Breve Brief / Objetivos</label>
+        <textarea id="message" name="message" rows="4" minlength="10" class="w-full px-0 py-4 bg-transparent border-b border-black/20 text-black focus:border-neon-primary focus:outline-none transition-all placeholder:text-black/40 font-medium resize-none" placeholder="DESCRIPCIÓN DEL PROYECTO..." required></textarea>
+      </div>
+
+      <button type="submit" id="submit-btn" class="w-full py-5 bg-black text-white font-black uppercase tracking-[0.3em] text-xs hover:bg-neon-primary hover:text-black transition-all duration-300 hover:glow-cyan disabled:opacity-50 disabled:cursor-not-allowed">
+        INICIAR CONVERSACIÓN
+      </button>
+
+      <!-- Message Feedback -->
+      <div id="form-feedback" class="mt-6 text-center text-xs font-bold uppercase tracking-widest hidden">
+         <span class="success-msg text-green-600 hidden">¡Mensaje enviado con éxito! Nos contactaremos pronto.</span>
+         <span class="error-msg text-red-600 hidden">Hubo un error. Por favor, verifica los campos.</span>
+      </div>
+    </form>
+  </div>
+</section>
+
+<style>
+  /* Show validation colors only after submission attempts */
+  form.was-validated input:invalid,
+  form.was-validated select:invalid,
+  form.was-validated textarea:invalid {
+    border-bottom-color: #ef4444;
+  }
+</style>
+
+<script>
+  const setupForm = () => {
+    const form = document.querySelector('#contact-form') as HTMLFormElement;
+    const btn = document.querySelector('#submit-btn') as HTMLButtonElement;
+    const feedback = document.querySelector('#form-feedback') as HTMLDivElement;
+
+    if (!form) return;
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      form.classList.add('was-validated');
+
+      if (!form.checkValidity()) {
+        const errorMsg = feedback.querySelector('.error-msg');
+        feedback.classList.remove('hidden');
+        errorMsg?.classList.remove('hidden');
+        return;
+      }
+
+      // Start Sending State
+      btn.disabled = true;
+      btn.textContent = 'ENVIANDO...';
+      feedback.classList.add('hidden');
+
+      try {
+        const formData = new FormData(form);
+        const object = Object.fromEntries(formData);
+        const json = JSON.stringify(object);
+
+        const response = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: json
+        });
+
+        const result = await response.json();
+        
+        if (response.status === 200) {
+          // Show Success
+          form.reset();
+          form.classList.remove('was-validated');
+          btn.textContent = 'MENSAJE ENVIADO';
+          feedback.classList.remove('hidden');
+          feedback.querySelector('.success-msg')?.classList.remove('hidden');
+          feedback.querySelector('.error-msg')?.classList.add('hidden');
+
+          // Reset button after 4s
+          setTimeout(() => {
+            btn.disabled = false;
+            btn.textContent = 'INICIAR CONVERSACIÓN';
+            feedback.classList.add('hidden');
+          }, 4000);
+        } else {
+          throw new Error(result.message || 'Error en el envío');
+        }
+
+      } catch (err) {
+        console.error(err);
+        btn.disabled = false;
+        btn.textContent = 'REINTENTAR';
+        feedback.classList.remove('hidden');
+        feedback.querySelector('.error-msg')?.classList.remove('hidden');
+        feedback.querySelector('.success-msg')?.classList.add('hidden');
+      }
+    });
+  };
+
+  document.addEventListener('astro:page-load', setupForm);
+</script>

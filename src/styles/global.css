@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Orbitron", ui-sans-serif, system-ui;
+  --font-body: "Rajdhani", ui-sans-serif, system-ui;
+
+  --color-neon-primary: hsl(187 100% 50%);
+  /* Cyan */
+  --color-neon-secondary: hsl(300 100% 60%);
+  /* Magenta */
+
+  --color-bg-dark: #09090b;
+}
+
+@utility glow-cyan {
+  box-shadow: 0 0 15px -3px var(--color-neon-primary), 0 0 6px -2px var(--color-neon-primary);
+}
+
+@utility glow-magenta {
+  box-shadow: 0 0 15px -3px var(--color-neon-secondary), 0 0 6px -2px var(--color-neon-secondary);
+}
+
+@utility glass {
+  @apply backdrop-blur-md bg-white/5 border border-white/10;
+}
+
+@utility glass-dark {
+  @apply backdrop-blur-xl bg-black/40 border border-white/5;
+}
+
+:root {
+  font-family: var(--font-body);
+  background-color: var(--color-bg-dark);
+  color: white;
+  scroll-behavior: smooth;
+}
+
+h1,
+h2,
+h3,
+h4,
+.font-display {
+  font-family: var(--font-display);
+}
+
+.theme-light {
+  background-color: #ffffff;
+  color: #0c0c0c;
+}
+
+.theme-dark {
+  background-color: var(--color-bg-dark);
+  color: white;
+}
+
+.glass-panel {
+  @apply backdrop-blur-md bg-white/5 border-b border-white/10;
+}

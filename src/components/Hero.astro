@@ -1,0 +1,121 @@
+---
+import { Image } from 'astro:assets';
+import logoWhite from '../assets/images/logos/logo-SL.png';
+---
+<section class="relative min-h-screen pt-28 flex items-center justify-center overflow-hidden theme-dark" data-header-theme="dark">
+  <!-- Background Elements -->
+  <div class="absolute inset-0 z-0">
+    <!-- Video Background -->
+    <video 
+      autoplay 
+      loop 
+      muted 
+      playsinline 
+      class="absolute inset-0 w-full h-full object-cover"
+    >
+      <source src="/videos/hero-bg.mp4" type="video/mp4" />
+    </video>
+    
+    <!-- Dark Overlay for legibility -->
+    <div class="absolute inset-0 bg-black/60 z-10"></div>
+    
+    <div class="absolute inset-0 z-20 bg-radial-gradient from-neon-primary/10 via-transparent to-transparent opacity-50 animate-pulse"></div>
+    <div class="absolute inset-0 z-20 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10"></div>
+    <div class="w-full h-full bg-linear-to-b from-[#09090b]/40 via-transparent to-[#09090b]"></div>
+  </div>
+
+  <div class="relative z-20 text-center px-4 max-w-5xl mx-auto pb-12">
+    <div class="inline-block px-4 py-1 rounded-full border border-neon-primary/30 bg-neon-primary/10 text-neon-primary text-xs font-bold uppercase tracking-widest mb-8 animate-fade-in">
+      EVENTS & MORE
+    </div>
+    
+    <div class="mb-8 animate-fade-in hero-logo-container">
+      <Image 
+        src={logoWhite} 
+        alt="House of Ravers" 
+        width={800} 
+        height={320} 
+        class="w-full max-w-md mx-auto h-auto max-h-[40vh] object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.2)]"
+      />
+    </div>
+    
+    <p class="text-xl md:text-2xl text-gray-400 mb-12 font-medium max-w-3xl mx-auto leading-relaxed">
+      Transformamos espacios comunes en <span class="text-white">experiencias sensoriales</span> inolvidables mediante ingeniería de luz y diseño inmersivo.
+    </p>
+    
+    <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
+      <a href="#contact" class="group relative px-10 py-4 bg-neon-primary text-black font-bold text-lg rounded-sm hover:scale-105 transition-all duration-300 overflow-hidden">
+        <span class="relative z-10 transition-colors group-hover:text-white">COTIZAR AHORA</span>
+        <div class="absolute inset-0 bg-black translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+      </a>
+      
+      <a href="#portfolio" class="px-10 py-4 glass border border-white/20 text-white font-bold text-lg rounded-sm hover:bg-white hover:text-black transition-all duration-300">
+        VER PORTAFOLIO
+      </a>
+    </div>
+  </div>
+  
+  <!-- Scroll Indicator -->
+  <div class="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 group cursor-pointer animate-bounce-slow">
+    <div class="relative w-5 h-8 border-2 border-white/20 rounded-full flex justify-center p-1 group-hover:border-neon-primary/50 transition-colors duration-300">
+      <div class="w-1 h-2 bg-neon-primary rounded-full animate-scroll-dot"></div>
+      <!-- Glow effect -->
+      <div class="absolute inset-0 rounded-full bg-neon-primary/0 group-hover:bg-neon-primary/5 blur-md transition-all duration-300"></div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .bg-radial-gradient {
+    background: radial-gradient(circle at center, var(--tw-gradient-from) 0%, var(--tw-gradient-to) 70%);
+  }
+  
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes bounce-slow {
+    0%, 100% { transform: translate(-50%, 0); }
+    50% { transform: translate(-50%, 10px); }
+  }
+
+  @keyframes scroll-dot {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(15px); opacity: 0; }
+  }
+  
+  .animate-fade-in {
+    animation: fade-in 1s ease-out forwards;
+  }
+
+  .animate-bounce-slow {
+    animation: bounce-slow 2s infinite ease-in-out;
+  }
+
+  .animate-scroll-dot {
+    animation: scroll-dot 1.5s infinite cubic-bezier(0.15, 0.41, 0.69, 0.94);
+  }
+</style>
+
+<script>
+  const handleHeroLogoScroll = () => {
+    const heroLogo = document.querySelector('.hero-logo-container') as HTMLElement;
+    if (!heroLogo) return;
+
+    const onScroll = () => {
+      const scrollPos = window.scrollY;
+      const opacity = Math.max(0, 1 - scrollPos / 400);
+      const scale = Math.max(0.8, 1 - scrollPos / 1000);
+      const translateY = scrollPos * 0.2; // Slight parallax
+
+      heroLogo.style.opacity = opacity.toString();
+      heroLogo.style.transform = `scale(${scale}) translateY(${translateY}px)`;
+    };
+
+    window.addEventListener('scroll', onScroll);
+    onScroll();
+  };
+
+  document.addEventListener('astro:page-load', handleHeroLogoScroll);
+</script>

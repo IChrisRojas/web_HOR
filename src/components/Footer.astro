@@ -1,0 +1,40 @@
+---
+import { Image } from 'astro:assets';
+import logoWhite from '../assets/images/logos/logo-SL.png';
+const currentYear = new Date().getFullYear();
+---
+<footer class="bg-[#050505] text-white py-24 px-6 border-t border-white/5 font-body">
+  <div class="container mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
+    <div class="md:col-span-12 lg:col-span-5">
+      <Image src={logoWhite} alt="House of Ravers Logo" width={150} height={50} class="h-10 w-auto mb-8 opacity-90" />
+      <p class="text-gray-500 text-base leading-relaxed font-medium max-w-sm">
+        Líderes en ingeniería de iluminación y producción de eventos de alto impacto en Chile. Elevamos la experiencia sensorial a través de la tecnología y el diseño.
+      </p>
+    </div>
+    
+    <div class="hidden lg:block lg:col-span-1"></div>
+
+    <div class="md:col-span-4 lg:col-span-3 flex flex-col gap-5">
+      <h4 class="text-xs font-black uppercase tracking-[0.4em] text-white/30 mb-2">Explora</h4>
+      <a href="/#services" class="text-gray-400 hover:text-neon-primary transition-colors font-bold uppercase tracking-wider text-sm">Servicios</a>
+      <a href="/#portfolio" class="text-gray-400 hover:text-neon-primary transition-colors font-bold uppercase tracking-wider text-sm">Proyectos</a>
+      <a href="/#contact" class="text-gray-400 hover:text-neon-primary transition-colors font-bold uppercase tracking-wider text-sm">Contacto</a>
+    </div>
+
+    <div class="md:col-span-4 lg:col-span-3 flex flex-col gap-5">
+      <h4 class="text-xs font-black uppercase tracking-[0.4em] text-white/30 mb-2">Social</h4>
+      <a href="https://www.instagram.com/house_of_ravers/" target="_blank" class="text-gray-400 hover:text-neon-primary transition-colors font-bold uppercase tracking-wider text-sm flex items-center gap-2">
+        <span class="w-1.5 h-1.5 rounded-full bg-neon-primary shadow-[0_0_8px_rgba(34,211,238,0.8)]"></span>
+        Instagram
+      </a>
+      <a href="mailto:contacto@houseofravers.cl" class="text-gray-400 hover:text-white transition-colors font-bold uppercase tracking-wider text-sm">Email</a>
+    </div>
+
+    <!-- Copyright at the bottom -->
+    <div class="md:col-span-12 pt-12 mt-12 border-t border-white/5">
+      <p class="text-white/20 text-[10px] uppercase tracking-[0.25em] font-black text-center md:text-left">
+        © {currentYear} HOUSE OF RAVERS. TODOS LOS DERECHOS RESERVADOS.
+      </p>
+    </div>
+  </div>
+</footer>

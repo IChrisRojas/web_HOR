@@ -1,0 +1,5 @@
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+ <title>Placeholder</title>
+ <rect width="800" height="600" fill="#cccccc" />
+ <text x="50%" y="50%" font-family="Verdana" font-size="35" fill="black" text-anchor="middle" dominant-baseline="middle">IMAGE</text>
+</svg>

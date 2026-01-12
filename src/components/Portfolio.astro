@@ -1,0 +1,118 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+
+const projects = await getCollection('portfolio');
+// Sort by date desc
+const sortedProjects = projects.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const r2Url = import.meta.env.PUBLIC_R2_URL || '';
+---
+
+<section id="portfolio" class="py-32 px-6 theme-dark bg-[#0a0a0c]" data-header-theme="dark">
+  <div class="container mx-auto">
+    <div class="flex flex-col lg:flex-row justify-between items-end mb-20 gap-8">
+      <div>
+        <h2 class="text-5xl font-black text-white mb-4 tracking-tighter uppercase font-display">Portafolio</h2>
+        <div class="w-16 h-1 bg-neon-secondary mb-6"></div>
+        <p class="text-gray-400 font-medium max-w-md">Una galería de experiencias inmersivas y precisión técnica.</p>
+      </div>
+      
+      <!-- Filter Buttons -->
+      <div id="portfolio-filters" class="flex flex-wrap gap-3 glass p-2 rounded-sm border-white/5">
+        <button data-filter="all" class="filter-btn active px-8 py-2 text-xs font-bold uppercase tracking-widest text-white/50 hover:text-white transition-all">Todos</button>
+        <button data-filter="corporate" class="filter-btn px-8 py-2 text-xs font-bold uppercase tracking-widest text-white/50 hover:text-white transition-all">Corporativo</button>
+        <button data-filter="event" class="filter-btn px-8 py-2 text-xs font-bold uppercase tracking-widest text-white/50 hover:text-white transition-all">Eventos</button>
+      </div>
+    </div>
+
+    <!-- Masonry Grid -->
+    <div id="portfolio-grid" class="columns-1 md:columns-2 lg:columns-3 gap-10 space-y-10">
+      {sortedProjects.slice(0, 6).map((project) => (
+        <div class={`portfolio-item break-inside-avoid relative group rounded-sm overflow-hidden cursor-pointer border border-white/5 transition-all duration-500 hover:border-white/20 hover:glow-magenta
+          ${project.data.type === 'corporate' ? 'filter-corporate' : 'filter-event'}
+        `} data-type={project.data.type}>
+          <!-- Image Container -->
+          <div class="relative overflow-hidden aspect-video bg-black/40">
+             {project.data.coverImage ? (
+               <img 
+                 src={`${r2Url}/${project.data.coverImage}`} 
+                 alt={project.data.title}
+                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                 loading="lazy"
+               />
+             ) : (
+               <div class="w-full h-full bg-[#121214] flex items-center justify-center text-gray-700 font-display text-xs">
+                 PROXIMAMENTE: {project.data.title}
+               </div>
+             )}
+             
+             <!-- Overlay -->
+             <div class="absolute inset-0 bg-linear-to-t from-black via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8">
+               <span class={`text-[10px] font-bold uppercase tracking-[0.3em] mb-3 
+                 ${project.data.type === 'corporate' ? 'text-neon-gold' : 'text-neon-secondary'}`
+               }>
+                 {project.data.type === 'corporate' ? 'Corporativo' : 'LIVE EVENT'}
+               </span>
+               <h3 class="text-2xl font-black text-white uppercase font-display tracking-tight">{project.data.title}</h3>
+               <p class="text-xs text-gray-400 mt-2 font-bold tracking-widest uppercase">{project.data.client}</p>
+             </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    {sortedProjects.length > 6 && (
+      <div class="mt-20 text-center">
+        <a href="/portfolio" class="inline-block px-12 py-4 border border-white/10 hover:border-neon-secondary hover:text-neon-secondary transition-all duration-300 font-bold uppercase tracking-[0.3em] text-xs">
+          Ver Todos los Proyectos
+        </a>
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  @reference "../styles/global.css";
+
+  .filter-btn.active {
+    @apply bg-white/10 text-white border border-white/10;
+    text-shadow: 0 0 10px rgba(255,255,255,0.3);
+  }
+</style>
+
+<script>
+  // Vanilla JS logic for filtering
+  const setupFilters = () => {
+    const buttons = document.querySelectorAll('.filter-btn');
+    const items = document.querySelectorAll('.portfolio-item');
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Active state
+        buttons.forEach(b => b.classList.remove('active', 'bg-gray-800', 'bg-white', 'text-black', 'bg-neon-primary'));
+        // Re-apply basic styles based on filter type to maintain consistent look? 
+        // For now just toggle 'active' class styling handled by CSS or class manipulation:
+        btn.classList.add('bg-white', 'text-black'); 
+        // (Simplified - styling needs to be robust)
+        
+        const filter = btn.getAttribute('data-filter');
+        
+        items.forEach((item) => {
+           const htmlItem = item as HTMLElement;
+           const type = htmlItem.getAttribute('data-type');
+           
+           if (filter === 'all' || filter === type) {
+             htmlItem.style.display = 'block';
+             // optional animation here
+           } else {
+             htmlItem.style.display = 'none';
+           }
+        });
+      });
+    });
+  };
+
+  // Run on load and after ViewTransitions swap
+  document.addEventListener('astro:page-load', setupFilters);
+</script>
