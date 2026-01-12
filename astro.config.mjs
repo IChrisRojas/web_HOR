@@ -13,6 +13,11 @@ export default defineConfig({
   adapter: cloudflare(),
   integrations: [react(), keystatic()],
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
+    resolve: {
+      alias: {
+        'react-dom/server': 'react-dom/server.edge',
+      }
+    }
   }
 });
