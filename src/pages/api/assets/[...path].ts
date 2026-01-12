@@ -25,11 +25,11 @@ export const GET: APIRoute = async ({ params, locals }) => {
     }
 
     const headers = new Headers();
-    object.writeHttpMetadata(headers);
+    object.writeHttpMetadata(headers as any);
     headers.set('etag', object.httpEtag);
     headers.set('Cache-Control', 'public, max-age=31536000');
 
-    return new Response(object.body, {
+    return new Response(object.body as any, {
         headers,
     });
 };

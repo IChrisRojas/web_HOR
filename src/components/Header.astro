@@ -1,41 +1,110 @@
 ---
-import { Image } from 'astro:assets';
-import logoWhite from '../assets/images/logos/logo-SL.png';
-import logoBlack from '../assets/images/logos/logo-black-SL.png';
+const logoWhite = "/api/assets/logos/logo-SL.png";
+const logoBlack = "/api/assets/logos/logo-black-SL.png";
 ---
-<header id="main-header" class="fixed top-0 left-0 w-full z-50 transition-all duration-500 py-4">
-  <div class="container mx-auto px-6 flex justify-between items-center transition-all duration-500 font-display uppercase tracking-widest text-sm">
+
+<header
+  id="main-header"
+  class="fixed top-0 left-0 w-full z-50 transition-all duration-500 py-4"
+>
+  <div
+    class="container mx-auto px-6 flex justify-between items-center transition-all duration-500 font-display uppercase tracking-widest text-sm"
+  >
     <a href="/" class="flex items-center">
-      <div id="logo-container" class="relative h-12 w-40 transition-all duration-700 logo-wrapper opacity-0 translate-y-[-10px] pointer-events-none">
-        <Image src={logoWhite} alt="House of Ravers Logo" width={180} height={60} class="logo-white absolute inset-0 h-full w-auto object-contain transition-all duration-500" />
-        <Image src={logoBlack} alt="House of Ravers Logo" width={180} height={60} class="logo-black absolute inset-0 h-full w-auto object-contain opacity-0 transition-all duration-500" />
+      <div
+        id="logo-container"
+        class="relative h-12 w-40 transition-all duration-700 logo-wrapper opacity-0 translate-y-[-10px] pointer-events-none"
+      >
+        <img
+          src={logoWhite}
+          alt="House of Ravers Logo"
+          width="180"
+          height="60"
+          class="logo-white absolute inset-0 h-full w-auto object-contain transition-all duration-500"
+        />
+        <img
+          src={logoBlack}
+          alt="House of Ravers Logo"
+          width="180"
+          height="60"
+          class="logo-black absolute inset-0 h-full w-auto object-contain opacity-0 transition-all duration-500"
+        />
       </div>
     </a>
-    
+
     <nav class="hidden md:flex gap-8 font-medium nav-links">
-      <a href="/#services" class="hover:text-neon-primary transition-colors">Servicios</a>
-      <a href="/#portfolio" class="hover:text-neon-primary transition-colors">Portfolio</a>
-      <a href="/#contact" class="hover:text-neon-primary transition-colors">Contacto</a>
+      <a href="/#services" class="hover:text-neon-primary transition-colors"
+        >Servicios</a
+      >
+      <a href="/#portfolio" class="hover:text-neon-primary transition-colors"
+        >Portfolio</a
+      >
+      <a href="/#contact" class="hover:text-neon-primary transition-colors"
+        >Contacto</a
+      >
     </nav>
-    
-    <button class="md:hidden mobile-menu-btn relative z-50 p-2 text-current" aria-label="Toggle Menu">
-      <div class="w-6 h-5 relative flex flex-col justify-between overflow-hidden">
-        <span class="w-full h-0.5 bg-current transition-all duration-300 origin-left burger-line"></span>
-        <span class="w-full h-0.5 bg-current transition-all duration-300 burger-line"></span>
-        <span class="w-full h-0.5 bg-current transition-all duration-300 origin-left burger-line"></span>
+
+    <button
+      class="md:hidden mobile-menu-btn relative z-50 p-2 text-current"
+      aria-label="Toggle Menu"
+    >
+      <div
+        class="w-6 h-5 relative flex flex-col justify-between overflow-hidden"
+      >
+        <span
+          class="w-full h-0.5 bg-current transition-all duration-300 origin-left burger-line"
+        ></span>
+        <span
+          class="w-full h-0.5 bg-current transition-all duration-300 burger-line"
+        ></span>
+        <span
+          class="w-full h-0.5 bg-current transition-all duration-300 origin-left burger-line"
+        ></span>
       </div>
     </button>
   </div>
 
   <!-- Mobile Menu Overlay -->
-  <div id="mobile-menu" class="fixed inset-0 bg-black/95 backdrop-blur-2xl flex flex-col items-center justify-center gap-8 text-2xl font-display uppercase tracking-widest opacity-0 pointer-events-none transition-all duration-500 z-40">
-    <a href="/#services" class="mobile-link hover:text-neon-primary transition-colors">Servicios</a>
-    <a href="/#portfolio" class="mobile-link hover:text-neon-primary transition-colors">Portfolio</a>
-    <a href="/#contact" class="mobile-link hover:text-neon-primary transition-colors">Contacto</a>
-    
+  <div
+    id="mobile-menu"
+    class="fixed inset-0 bg-black/95 backdrop-blur-2xl flex flex-col items-center justify-center gap-8 text-2xl font-display uppercase tracking-widest opacity-0 pointer-events-none transition-all duration-500 z-40"
+  >
+    <a
+      href="/#services"
+      class="mobile-link hover:text-neon-primary transition-colors">Servicios</a
+    >
+    <a
+      href="/#portfolio"
+      class="mobile-link hover:text-neon-primary transition-colors">Portfolio</a
+    >
+    <a
+      href="/#contact"
+      class="mobile-link hover:text-neon-primary transition-colors">Contacto</a
+    >
+
     <div class="mt-8 flex gap-6">
-      <a href="https://www.instagram.com/house_of_ravers/" target="_blank" class="text-white/50 hover:text-neon-secondary transition-colors">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+      <a
+        href="https://www.instagram.com/house_of_ravers/"
+        target="_blank"
+        class="text-white/50 hover:text-neon-secondary transition-colors"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          ><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path
+            d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line
+            x1="17.5"
+            y1="6.5"
+            x2="17.51"
+            y2="6.5"></line></svg
+        >
       </a>
     </div>
   </div>
@@ -48,7 +117,7 @@ import logoBlack from '../assets/images/logos/logo-black-SL.png';
   header.header-light {
     @apply bg-white/90 border-b border-gray-200 text-black shadow-sm;
   }
-  
+
   header.header-dark {
     @apply bg-black/40 border-b border-white/5 text-white backdrop-blur-xl;
   }
@@ -63,11 +132,19 @@ import logoBlack from '../assets/images/logos/logo-black-SL.png';
   }
 
   /* Adjust height and opacity */
-  .header-light .logo-white { opacity: 0; }
-  .header-light .logo-black { opacity: 1; }
-  
-  .header-dark .logo-white { opacity: 1; }
-  .header-dark .logo-black { opacity: 0; }
+  .header-light .logo-white {
+    opacity: 0;
+  }
+  .header-light .logo-black {
+    opacity: 1;
+  }
+
+  .header-dark .logo-white {
+    opacity: 1;
+  }
+  .header-dark .logo-black {
+    opacity: 0;
+  }
 
   header.header-scrolled .logo-wrapper {
     @apply h-9 w-32;
@@ -78,66 +155,73 @@ import logoBlack from '../assets/images/logos/logo-black-SL.png';
     @apply opacity-100 pointer-events-auto;
   }
 
-  .menu-open .burger-line:nth-child(1) { transform: rotate(45deg); }
-  .menu-open .burger-line:nth-child(2) { opacity: 0; transform: translateX(20px); }
-  .menu-open .burger-line:nth-child(3) { transform: rotate(-45deg); }
+  .menu-open .burger-line:nth-child(1) {
+    transform: rotate(45deg);
+  }
+  .menu-open .burger-line:nth-child(2) {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  .menu-open .burger-line:nth-child(3) {
+    transform: rotate(-45deg);
+  }
 </style>
 
 <script>
   const initHeaderEffect = () => {
-    const header = document.getElementById('main-header');
-    const sections = document.querySelectorAll('[data-header-theme]');
-    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const mobileLinks = document.querySelectorAll('.mobile-link');
-    
+    const header = document.getElementById("main-header");
+    const sections = document.querySelectorAll("[data-header-theme]");
+    const mobileMenuBtn = document.querySelector(".mobile-menu-btn");
+    const mobileMenu = document.getElementById("mobile-menu");
+    const mobileLinks = document.querySelectorAll(".mobile-link");
+
     if (!header) return;
 
     // Mobile Menu Toggle
     const toggleMenu = () => {
-      mobileMenu?.classList.toggle('active');
-      mobileMenuBtn?.classList.toggle('menu-open');
-      document.body.classList.toggle('overflow-hidden');
+      mobileMenu?.classList.toggle("active");
+      mobileMenuBtn?.classList.toggle("menu-open");
+      document.body.classList.toggle("overflow-hidden");
     };
 
-    mobileMenuBtn?.addEventListener('click', toggleMenu);
-    mobileLinks.forEach(link => link.addEventListener('click', toggleMenu));
+    mobileMenuBtn?.addEventListener("click", toggleMenu);
+    mobileLinks.forEach((link) => link.addEventListener("click", toggleMenu));
 
     // Handle Scroll Size
     const handleScroll = () => {
       if (window.scrollY > 30) {
-        header.classList.add('header-scrolled');
+        header.classList.add("header-scrolled");
       } else {
-        header.classList.remove('header-scrolled');
+        header.classList.remove("header-scrolled");
       }
     };
 
     // Handle Theme Recognition
     const observerOptions = {
       root: null,
-      rootMargin: '-10% 0px -80% 0px',
-      threshold: 0
+      rootMargin: "-10% 0px -80% 0px",
+      threshold: 0,
     };
 
     const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
+      entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          const theme = entry.target.getAttribute('data-header-theme');
-          if (theme === 'light') {
-            header.classList.remove('header-dark');
-            header.classList.add('header-light');
+          const theme = entry.target.getAttribute("data-header-theme");
+          if (theme === "light") {
+            header.classList.remove("header-dark");
+            header.classList.add("header-light");
           } else {
-            header.classList.remove('header-light');
-            header.classList.add('header-dark');
+            header.classList.remove("header-light");
+            header.classList.add("header-dark");
           }
         }
       });
     }, observerOptions);
 
-    sections.forEach(section => observer.observe(section));
-    window.addEventListener('scroll', handleScroll);
+    sections.forEach((section) => observer.observe(section));
+    window.addEventListener("scroll", handleScroll);
     handleScroll(); // Initial check
   };
 
-  document.addEventListener('astro:page-load', initHeaderEffect);
+  document.addEventListener("astro:page-load", initHeaderEffect);
 </script>
