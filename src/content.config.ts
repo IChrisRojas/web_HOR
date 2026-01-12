@@ -3,24 +3,25 @@ import { glob } from 'astro/loaders';
 
 const services = defineCollection({
   loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/services" }),
-  schema: ({ image }) => z.object({
+  schema: () => z.object({
     title: z.string(),
     description: z.string(),
-    icon: z.string().optional(), // Using string for now (e.g. icon name), or could be image
+    icon: z.string().optional(),
     type: z.enum(['corporate', 'event']),
-    coverImage: image().optional(),
+    coverImage: z.string().optional(),
   }),
 });
 
 const portfolio = defineCollection({
   loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/portfolio" }),
-  schema: ({ image }) => z.object({
+  schema: () => z.object({
     title: z.string(),
-    date: z.date(),
+    date: z.coerce.date(),
     client: z.string(),
-    gallery: z.array(image()),
+    gallery: z.array(z.string()).optional(),
     type: z.enum(['corporate', 'event']),
-    description: z.string(),
+    description: z.string().optional(),
+    coverImage: z.string().optional(),
   }),
 });
 

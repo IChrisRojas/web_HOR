@@ -5,12 +5,18 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import WhatsAppBtn from "../components/WhatsAppBtn.astro";
 
+export const prerender = false;
+
 const projects = await getCollection("portfolio");
 const sortedProjects = projects.sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
 
-const r2Url = import.meta.env.PUBLIC_R2_URL || "";
+const getAssetUrl = (project: any) => {
+  if (!project.data.coverImage) return null;
+  const folder = project.data.type === "corporate" ? "corporate" : "events";
+  return `/api/assets/portfolio/${folder}/${project.data.coverImage}`;
+};
 ---
 
 <BaseLayout title="Portafolio | House of Ravers">
@@ -68,9 +74,9 @@ const r2Url = import.meta.env.PUBLIC_R2_URL || "";
               data-type={project.data.type}
             >
               <div class="relative overflow-hidden aspect-video bg-black/40">
-                {project.data.coverImage ? (
+                {getAssetUrl(project) ? (
                   <img
-                    src={`${r2Url}/${project.data.coverImage}`}
+                    src={getAssetUrl(project)}
                     alt={project.data.title}
                     class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     loading="lazy"
