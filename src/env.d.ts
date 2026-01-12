@@ -16,4 +16,8 @@ declare namespace App {
 
 interface Env {
     BUCKET: import('@cloudflare/workers-types').R2Bucket;
+    INSTAGRAM_TOKEN: string;
+    PUBLIC_WEB3FORMS_KEY: string;
+    ADMIN_USERNAME: string;
+    ADMIN_PASSWORD: string;
 }

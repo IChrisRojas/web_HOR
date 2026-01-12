@@ -1,5 +1,5 @@
 ---
-const token = import.meta.env.INSTAGRAM_TOKEN;
+const token = Astro.locals.runtime.env.INSTAGRAM_TOKEN;
 let posts = [];
 
 try {
