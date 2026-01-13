@@ -1,5 +1,7 @@
 ---
-const logoWhite = "/api/assets/logos/logo-SL.png";
+import { getR2AssetUrl } from "../utils/r2";
+
+const logoWhite = getR2AssetUrl("logos/logo-SL.png");
 const currentYear = new Date().getFullYear();
 ---
 

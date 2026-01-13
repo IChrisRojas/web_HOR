@@ -1,5 +1,7 @@
 ---
-const logoWhite = "/api/assets/logos/logo-SL.png";
+import { getR2AssetUrl } from "../utils/r2";
+
+const logoWhite = getR2AssetUrl("logos/logo-SL.png");
 ---
 
 <section
@@ -16,7 +18,7 @@ const logoWhite = "/api/assets/logos/logo-SL.png";
       playsinline
       class="absolute inset-0 w-full h-full object-cover"
     >
-      <source src="/api/assets/videos/hero-bg.mp4" type="video/mp4" />
+      <source src={getR2AssetUrl("videos/hero-bg.mp4")} type="video/mp4" />
     </video>
 
     <!-- Dark Overlay for legibility -->

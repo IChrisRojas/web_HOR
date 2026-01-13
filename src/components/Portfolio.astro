@@ -2,6 +2,8 @@
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 
+import { getPortfolioAssetUrl } from "../utils/r2";
+
 const projects = await getCollection('portfolio');
 const sortedProjects = projects.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
@@ -13,8 +15,7 @@ const displayedProjects = [...corporateProjects, ...eventProjects].sort((a, b) =
 
 const getAssetUrl = (project: any) => {
   if (!project.data.coverImage) return null;
-  const folder = project.data.type === 'corporate' ? 'corporate' : 'events';
-  return `/api/assets/portfolio/${folder}/${project.data.coverImage}`;
+  return getPortfolioAssetUrl(project.data.type, project.data.coverImage);
 };
 ---
 

@@ -1,6 +1,8 @@
 ---
-const logoWhite = "/api/assets/logos/logo-SL.png";
-const logoBlack = "/api/assets/logos/logo-black-SL.png";
+import { getR2AssetUrl } from "../utils/r2";
+
+const logoWhite = getR2AssetUrl("logos/logo-SL.png");
+const logoBlack = getR2AssetUrl("logos/logo-black-SL.png");
 ---
 
 <header
