@@ -1,6 +1,5 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
-import react from '@astrojs/react';
 import cloudflare from '@astrojs/cloudflare';
 import tailwindcss from '@tailwindcss/vite';
 
@@ -9,13 +8,8 @@ export default defineConfig({
   site: 'https://houseofravers.cl',
   output: 'static',
   adapter: cloudflare(),
-  integrations: [react()],
+  integrations: [],
   vite: {
     plugins: [tailwindcss()],
-    resolve: {
-      alias: {
-        'react-dom/server': 'react-dom/server.edge',
-      }
-    }
   }
 });
