@@ -145,187 +145,44 @@ const getVideoUrl = (project: any) => {
 
   <Footer />
   <WhatsAppBtn />
-</BaseLayout>
 
-<style>
-  @reference "../styles/global.css";
-  .filter-btn.active {
-    @apply bg-white text-black border-white;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-  }
-  .filter-btn.active span {
-    @apply bg-black;
-  }
-</style>
+  <script>
+    const setupFilters = () => {
+      const buttons = document.querySelectorAll(".filter-btn");
+      const items = document.querySelectorAll(".portfolio-item");
 
-<script>
-  const setupFilters = () => {
-    const buttons = document.querySelectorAll(".filter-btn");
-    const items = document.querySelectorAll(".portfolio-item");
+      buttons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          buttons.forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
 
-    buttons.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        buttons.forEach((b) => b.classList.remove("active"));
-        btn.classList.add("active");
+          const filter = btn.getAttribute("data-filter");
 
-        const filter = btn.getAttribute("data-filter");
+          items.forEach((item) => {
+            const htmlItem = item as HTMLElement;
+            const type = htmlItem.getAttribute("data-type");
 
-        items.forEach((item) => {
-          const htmlItem = item as HTMLElement;
-          const type = htmlItem.getAttribute("data-type");
-
-          if (filter === "all" || filter === type) {
-            htmlItem.style.display = "block";
-          } else {
-            htmlItem.style.display = "none";
-          }
+            if (filter === "all" || filter === type) {
+              htmlItem.style.display = "block";
+            } else {
+              htmlItem.style.display = "none";
+            }
+          });
         });
       });
-    });
-  };
+    };
 
-  document.addEventListener("astro:page-load", setupFilters);
-</script>
+    document.addEventListener("astro:page-load", setupFilters);
+  </script>
 
-<BaseLayout title="Portafolio | House of Ravers">
-  <Header />
-
-  <main class="pt-32 pb-32 bg-[#0a0a0c] min-h-screen text-white">
-    <div class="container mx-auto px-6">
-      <div class="mb-20">
-        <h1
-          class="text-6xl font-black mb-4 tracking-tighter uppercase font-display"
-        >
-          Full <span class="text-neon-secondary">Portafolio</span>
-        </h1>
-        <div class="w-24 h-1 bg-neon-secondary mb-8"></div>
-        <p class="text-xl text-gray-400 max-w-2xl font-medium leading-relaxed">
-          Explora todos nuestros proyectos, desde producciones corporativas de
-          alto nivel hasta experiencias inmersivas en eventos masivos.
-        </p>
-      </div>
-
-      <!-- Filter Dashboard -->
-      <div class="flex flex-wrap gap-4 mb-20">
-        <button
-          data-filter="all"
-          class="filter-btn active flex items-center gap-3 px-8 py-3 bg-white/5 border border-white/10 text-xs font-black uppercase tracking-[0.2em] hover:bg-white/10 transition-all cursor-pointer"
-        >
-          <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
-          Todos
-        </button>
-        <button
-          data-filter="corporate"
-          class="filter-btn flex items-center gap-3 px-8 py-3 bg-white/5 border border-white/10 text-xs font-black uppercase tracking-[0.2em] hover:bg-white/10 transition-all cursor-pointer"
-        >
-          <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-          Corporativo
-        </button>
-        <button
-          data-filter="event"
-          class="filter-btn flex items-center gap-3 px-8 py-3 bg-white/5 border border-white/10 text-xs font-black uppercase tracking-[0.2em] hover:bg-white/10 transition-all cursor-pointer"
-        >
-          <span class="w-1.5 h-1.5 rounded-full bg-neon-secondary"></span>
-          Eventos Live
-        </button>
-      </div>
-
-      <!-- Grid -->
-      <div
-        id="portfolio-grid"
-        class="columns-1 md:columns-2 lg:columns-3 gap-10 space-y-10"
-      >
-        {
-          sortedProjects.map((project) => (
-            <div
-              class="portfolio-item break-inside-avoid group relative rounded-sm overflow-hidden border border-white/5 transition-all duration-500 hover:border-white/20 hover:glow-magenta"
-              data-type={project.data.type}
-            >
-              <div class="relative overflow-hidden aspect-video bg-black/40">
-                {getAssetUrl(project) ? (
-                  <img
-                    src={getAssetUrl(project)}
-                    alt={project.data.title}
-                    class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    loading="lazy"
-                  />
-                ) : (
-                  <div class="w-full h-full bg-[#121214] flex items-center justify-center text-gray-700 font-display text-xs">
-                    PROXIMAMENTE: {project.data.title}
-                  </div>
-                )}
-
-                <div class="absolute inset-0 bg-linear-to-t from-black via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8">
-                  <span
-                    class={`text-[10px] font-bold uppercase tracking-[0.3em] mb-3 
-                   ${project.data.type === "corporate" ? "text-amber-400" : "text-neon-secondary"}`}
-                  >
-                    {project.data.type === "corporate"
-                      ? "Corporativo"
-                      : "LIVE EVENT"}
-                  </span>
-                  <h3 class="text-2xl font-black text-white uppercase font-display tracking-tight">
-                    {project.data.title}
-                  </h3>
-                  <p class="text-xs text-gray-400 mt-2 font-bold tracking-widest uppercase">
-                    {project.data.client}
-                  </p>
-                  <p class="text-xs text-white/40 mt-4 line-clamp-2">
-                    {project.data.description}
-                  </p>
-                </div>
-              </div>
-            </div>
-          ))
-        }
-      </div>
-    </div>
-  </main>
-
-  <Footer />
-  <WhatsAppBtn />
+  <style>
+    @reference "../styles/global.css";
+    .filter-btn.active {
+      @apply bg-white text-black border-white;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+    }
+    .filter-btn.active span {
+      @apply bg-black;
+    }
+  </style>
 </BaseLayout>
-
-<style>
-  @reference "../styles/global.css";
-  .filter-btn.active {
-    @apply bg-white text-black border-white;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-  }
-  .filter-btn.active span {
-    @apply bg-black;
-  }
-
-  .glow-magenta {
-    box-shadow: 0 0 20px -5px rgba(255, 0, 255, 0.3);
-  }
-</style>
-
-<script>
-  const setupFilters = () => {
-    const buttons = document.querySelectorAll(".filter-btn");
-    const items = document.querySelectorAll(".portfolio-item");
-
-    buttons.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        buttons.forEach((b) => b.classList.remove("active"));
-        btn.classList.add("active");
-
-        const filter = btn.getAttribute("data-filter");
-
-        items.forEach((item) => {
-          const htmlItem = item as HTMLElement;
-          const type = htmlItem.getAttribute("data-type");
-
-          if (filter === "all" || filter === type) {
-            htmlItem.style.display = "block";
-          } else {
-            htmlItem.style.display = "none";
-          }
-        });
-      });
-    });
-  };
-
-  document.addEventListener("astro:page-load", setupFilters);
-</script>
