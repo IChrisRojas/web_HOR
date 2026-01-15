@@ -1,128 +1,527 @@
 ---
-import { getCollection } from 'astro:content';
-import { Image } from 'astro:assets';
-
+import { getCollection } from "astro:content";
 import { getPortfolioAssetUrl } from "../utils/r2";
+import Lightbox from "./Lightbox.astro";
 
-const projects = await getCollection('portfolio');
-const sortedProjects = projects.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const projects = await getCollection("portfolio");
+const sortedProjects = projects.sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
 
-// Get latest 3 of each category
-const corporateProjects = sortedProjects.filter(p => p.data.type === 'corporate').slice(0, 3);
-const eventProjects = sortedProjects.filter(p => p.data.type === 'event').slice(0, 3);
-
-const displayedProjects = [...corporateProjects, ...eventProjects].sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+// Get latest 6 of each category
+const corporateProjects = sortedProjects
+  .filter((p) => p.data.type === "corporate")
+  .slice(0, 6);
+const eventProjects = sortedProjects
+  .filter((p) => p.data.type === "event")
+  .slice(0, 6);
 
 const getAssetUrl = (project: any) => {
   if (!project.data.coverImage) return null;
   return getPortfolioAssetUrl(project.data.type, project.data.coverImage);
 };
+
+const getVideoUrl = (project: any) => {
+  // Check if gallery has video
+  if (project.data.gallery && project.data.gallery.length > 0) {
+    const video = project.data.gallery.find(
+      (item: string) => item.endsWith(".mp4") || item.endsWith(".mov"),
+    );
+    if (video) return getPortfolioAssetUrl(project.data.type, video);
+  }
+  return null;
+};
 ---
 
-<section id="portfolio" class="py-32 px-6 theme-dark bg-[#0a0a0c]" data-header-theme="dark">
+<section
+  id="portfolio"
+  class="py-32 px-6 theme-dark bg-[#0a0a0c]"
+  data-header-theme="dark"
+>
   <div class="container mx-auto">
-    <div class="flex flex-col lg:flex-row justify-between items-end mb-20 gap-8">
+    <div
+      class="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-20 gap-8"
+    >
       <div>
-        <h2 class="text-5xl font-black text-white mb-4 tracking-tighter uppercase font-display">Portafolio</h2>
-        <div class="w-16 h-1 bg-neon-secondary mb-6"></div>
-        <p class="text-gray-400 font-medium max-w-md">Una galería de experiencias inmersivas y precisión técnica.</p>
+        <h2
+          class="text-5xl font-black text-white mb-4 tracking-tighter uppercase font-display"
+        >
+          Portafolio
+        </h2>
+        <div class="w-16 h-1 bg-neon-primary mb-6"></div>
+        <p class="text-gray-400 font-medium max-w-md">
+          Una galería de experiencias inmersivas y precisión técnica.
+        </p>
       </div>
-      
+
       <!-- Filter Buttons -->
-      <div id="portfolio-filters" class="flex flex-wrap gap-3 glass p-2 rounded-sm border-white/5">
-        <button data-filter="all" class="filter-btn active px-8 py-2 text-xs font-bold uppercase tracking-widest text-white/50 hover:text-white transition-all">Todos</button>
-        <button data-filter="corporate" class="filter-btn px-8 py-2 text-xs font-bold uppercase tracking-widest text-white/50 hover:text-white transition-all">Corporativo</button>
-        <button data-filter="event" class="filter-btn px-8 py-2 text-xs font-bold uppercase tracking-widest text-white/50 hover:text-white transition-all">Eventos</button>
+      <div
+        id="portfolio-filters"
+        class="flex flex-wrap gap-0 glass rounded-sm border-white/5 overflow-hidden"
+      >
+        <button
+          data-filter="corporate"
+          class="filter-btn active w-40 py-3 text-xs font-bold uppercase tracking-widest text-white/50 hover:text-white transition-all bg-white/5"
+          >Corporativo</button
+        >
+        <button
+          data-filter="event"
+          class="filter-btn w-40 py-3 text-xs font-bold uppercase tracking-widest text-white/50 hover:text-white transition-all"
+          >Eventos</button
+        >
       </div>
     </div>
 
-    <!-- Masonry Grid -->
-    <div id="portfolio-grid" class="columns-1 md:columns-2 lg:columns-3 gap-10 space-y-10">
-      {displayedProjects.map((project) => (
-        <div class={`portfolio-item break-inside-avoid relative group rounded-sm overflow-hidden cursor-pointer border border-white/5 transition-all duration-500 hover:border-white/20 hover:glow-magenta
-          ${project.data.type === 'corporate' ? 'filter-corporate' : 'filter-event'}
-        `} data-type={project.data.type}>
-          <!-- Image Container -->
-          <div class="relative overflow-hidden aspect-video bg-black/40">
-             {getAssetUrl(project) ? (
-               <img 
-                 src={getAssetUrl(project)} 
-                 alt={project.data.title}
-                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                 loading="lazy"
-               />
-             ) : (
-               <div class="w-full h-full bg-[#121214] flex items-center justify-center text-gray-700 font-display text-xs">
-                 PROXIMAMENTE: {project.data.title}
-               </div>
-             )}
-             
-             <!-- Overlay -->
-             <div class="absolute inset-0 bg-linear-to-t from-black via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8">
-               <span class={`text-[10px] font-bold uppercase tracking-[0.3em] mb-3 
-                 ${project.data.type === 'corporate' ? 'text-amber-400' : 'text-neon-secondary'}`
-               }>
-                 {project.data.type === 'corporate' ? 'Corporativo' : 'LIVE EVENT'}
-               </span>
-               <h3 class="text-2xl font-black text-white uppercase font-display tracking-tight">{project.data.title}</h3>
-               <p class="text-xs text-gray-400 mt-2 font-bold tracking-widest uppercase">{project.data.client}</p>
-             </div>
+    <!-- Carousel Container -->
+    <div class="relative group/carousel">
+      <!-- Corporate Carousel -->
+      <div
+        id="corporate-carousel"
+        class="carousel-section block transition-opacity duration-500"
+      >
+        <div class="carousel-track-container overflow-hidden">
+          <div
+            class="carousel-track flex transition-transform duration-700 ease-in-out"
+            data-slide="0"
+          >
+            {/* Slide 1: First 3 items */}
+            <div
+              class="carousel-slide min-w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"
+            >
+              {
+                corporateProjects.slice(0, 3).map((project) => (
+                  <a
+                    href="#"
+                    onclick={`event.preventDefault(); openLightbox('${getVideoUrl(project) || getAssetUrl(project)}', '${getVideoUrl(project) ? "video" : "image"}', '${project.data.title}')`}
+                    class="portfolio-item relative group block rounded-sm overflow-hidden cursor-pointer border border-white/5 hover:border-neon-primary/50 transition-all duration-500"
+                  >
+                    <div class="relative overflow-hidden aspect-video bg-black/40">
+                      {getAssetUrl(project) ? (
+                        <img
+                          src={getAssetUrl(project)}
+                          alt={project.data.title}
+                          class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div class="w-full h-full bg-[#121214] flex items-center justify-center text-gray-700 font-display text-xs">
+                          PROXIMAMENTE: {project.data.title}
+                        </div>
+                      )}
+
+                      {/* Video Indicator Icon if it has video */}
+                      {getVideoUrl(project) && (
+                        <div class="absolute top-4 right-4 bg-black/50 backdrop-blur-md p-2 rounded-full border border-white/10 z-10 transition-transform duration-300 group-hover:scale-110">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            class="text-white"
+                          >
+                            <polygon points="5 3 19 12 5 21 5 3" />
+                          </svg>
+                        </div>
+                      )}
+
+                      <div class="absolute inset-0 bg-linear-to-t from-black via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8">
+                        <span class="text-[10px] font-bold uppercase tracking-[0.3em] mb-3 text-neon-primary">
+                          Corporativo
+                        </span>
+                        <h3 class="text-2xl font-black text-white uppercase font-display tracking-tight">
+                          {project.data.title}
+                        </h3>
+                      </div>
+                    </div>
+                  </a>
+                ))
+              }
+            </div>
+            {/* Slide 2: Next 3 items (only render if they exist) */}
+            {
+              corporateProjects.length > 3 && (
+                <div class="carousel-slide min-w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                  {corporateProjects.slice(3, 6).map((project) => (
+                    <a
+                      href="#"
+                      onclick={`event.preventDefault(); openLightbox('${getVideoUrl(project) || getAssetUrl(project)}', '${getVideoUrl(project) ? "video" : "image"}', '${project.data.title}')`}
+                      class="portfolio-item relative group block rounded-sm overflow-hidden cursor-pointer border border-white/5 hover:border-neon-primary/50 transition-all duration-500"
+                    >
+                      <div class="relative overflow-hidden aspect-video bg-black/40">
+                        {getAssetUrl(project) ? (
+                          <img
+                            src={getAssetUrl(project)}
+                            alt={project.data.title}
+                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            loading="lazy"
+                          />
+                        ) : (
+                          <div class="w-full h-full bg-[#121214] flex items-center justify-center text-gray-700 font-display text-xs">
+                            PROXIMAMENTE: {project.data.title}
+                          </div>
+                        )}
+                        {/* Video Indicator Icon if it has video */}
+                        {getVideoUrl(project) && (
+                          <div class="absolute top-4 right-4 bg-black/50 backdrop-blur-md p-2 rounded-full border border-white/10 z-10 transition-transform duration-300 group-hover:scale-110">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                              fill="currentColor"
+                              class="text-white"
+                            >
+                              <polygon points="5 3 19 12 5 21 5 3" />
+                            </svg>
+                          </div>
+                        )}
+                        <div class="absolute inset-0 bg-linear-to-t from-black via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8">
+                          <span class="text-[10px] font-bold uppercase tracking-[0.3em] mb-3 text-neon-primary">
+                            Corporativo
+                          </span>
+                          <h3 class="text-2xl font-black text-white uppercase font-display tracking-tight">
+                            {project.data.title}
+                          </h3>
+                        </div>
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              )
+            }
           </div>
         </div>
-      ))}
+
+        {/* Navigation Arrows (Only if more than 3) */}
+        {
+          corporateProjects.length > 3 && (
+            <div class="carousel-nav absolute inset-y-0 -left-4 -right-4 lg:-left-12 lg:-right-12 pointer-events-none flex justify-between items-center z-10">
+              <button
+                class="nav-btn prev pointer-events-auto p-3 border border-white/10 hover:border-amber-400 hover:text-amber-400 text-white/50 transition-all rounded-full bg-black/50 backdrop-blur-md"
+                aria-label="Previous"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="m15 18-6-6 6-6" />
+                </svg>
+              </button>
+              <button
+                class="nav-btn next pointer-events-auto p-3 border border-white/10 hover:border-amber-400 hover:text-amber-400 text-white/50 transition-all rounded-full bg-black/50 backdrop-blur-md"
+                aria-label="Next"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="m9 18 6-6-6-6" />
+                </svg>
+              </button>
+            </div>
+          )
+        }
+      </div>
+
+      <!-- Event Carousel -->
+      <div
+        id="event-carousel"
+        class="carousel-section hidden transition-opacity duration-500"
+      >
+        <div class="carousel-track-container overflow-hidden">
+          <div
+            class="carousel-track flex transition-transform duration-700 ease-in-out"
+            data-slide="0"
+          >
+            {/* Slide 1 */}
+            <div
+              class="carousel-slide min-w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"
+            >
+              {
+                eventProjects.slice(0, 3).map((project) => (
+                  <a
+                    href="#"
+                    onclick={`event.preventDefault(); openLightbox('${getVideoUrl(project) || getAssetUrl(project)}', '${getVideoUrl(project) ? "video" : "image"}', '${project.data.title}')`}
+                    class="portfolio-item relative group block rounded-sm overflow-hidden cursor-pointer border border-white/5 hover:border-neon-primary/50 transition-all duration-500"
+                  >
+                    <div class="relative overflow-hidden aspect-video bg-black/40">
+                      {getAssetUrl(project) ? (
+                        <img
+                          src={getAssetUrl(project)}
+                          alt={project.data.title}
+                          class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div class="w-full h-full bg-[#121214] flex items-center justify-center text-gray-700 font-display text-xs">
+                          PROXIMAMENTE: {project.data.title}
+                        </div>
+                      )}
+                      {/* Video Indicator Icon if it has video */}
+                      {getVideoUrl(project) && (
+                        <div class="absolute top-4 right-4 bg-black/50 backdrop-blur-md p-2 rounded-full border border-white/10 z-10 transition-transform duration-300 group-hover:scale-110">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            class="text-white"
+                          >
+                            <polygon points="5 3 19 12 5 21 5 3" />
+                          </svg>
+                        </div>
+                      )}
+                      <div class="absolute inset-0 bg-linear-to-t from-black via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8">
+                        <span class="text-[10px] font-bold uppercase tracking-[0.3em] mb-3 text-neon-primary">
+                          LIVE EVENT
+                        </span>
+                        <h3 class="text-2xl font-black text-white uppercase font-display tracking-tight">
+                          {project.data.title}
+                        </h3>
+                      </div>
+                    </div>
+                  </a>
+                ))
+              }
+            </div>
+            {/* Slide 2 */}
+            {
+              eventProjects.length > 3 && (
+                <div class="carousel-slide min-w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                  {eventProjects.slice(3, 6).map((project) => (
+                    <a
+                      href="#"
+                      onclick={`event.preventDefault(); openLightbox('${getVideoUrl(project) || getAssetUrl(project)}', '${getVideoUrl(project) ? "video" : "image"}', '${project.data.title}')`}
+                      class="portfolio-item relative group block rounded-sm overflow-hidden cursor-pointer border border-white/5 hover:border-neon-primary/50 transition-all duration-500"
+                    >
+                      <div class="relative overflow-hidden aspect-video bg-black/40">
+                        {getAssetUrl(project) ? (
+                          <img
+                            src={getAssetUrl(project)}
+                            alt={project.data.title}
+                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            loading="lazy"
+                          />
+                        ) : (
+                          <div class="w-full h-full bg-[#121214] flex items-center justify-center text-gray-700 font-display text-xs">
+                            PROXIMAMENTE: {project.data.title}
+                          </div>
+                        )}
+                        {/* Video Indicator Icon if it has video */}
+                        {getVideoUrl(project) && (
+                          <div class="absolute top-4 right-4 bg-black/50 backdrop-blur-md p-2 rounded-full border border-white/10 z-10 transition-transform duration-300 group-hover:scale-110">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                              fill="currentColor"
+                              class="text-white"
+                            >
+                              <polygon points="5 3 19 12 5 21 5 3" />
+                            </svg>
+                          </div>
+                        )}
+                        <div class="absolute inset-0 bg-linear-to-t from-black via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8">
+                          <span class="text-[10px] font-bold uppercase tracking-[0.3em] mb-3 text-neon-primary">
+                            LIVE EVENT
+                          </span>
+                          <h3 class="text-2xl font-black text-white uppercase font-display tracking-tight">
+                            {project.data.title}
+                          </h3>
+                        </div>
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              )
+            }
+          </div>
+        </div>
+
+        {
+          eventProjects.length > 3 && (
+            <div class="carousel-nav absolute inset-y-0 -left-4 -right-4 lg:-left-12 lg:-right-12 pointer-events-none flex justify-between items-center z-10">
+              <button
+                class="nav-btn prev pointer-events-auto p-3 border border-white/10 hover:border-neon-secondary hover:text-neon-secondary text-white/50 transition-all rounded-full bg-black/50 backdrop-blur-md"
+                aria-label="Previous"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="m15 18-6-6 6-6" />
+                </svg>
+              </button>
+              <button
+                class="nav-btn next pointer-events-auto p-3 border border-white/10 hover:border-neon-secondary hover:text-neon-secondary text-white/50 transition-all rounded-full bg-black/50 backdrop-blur-md"
+                aria-label="Next"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="m9 18 6-6-6-6" />
+                </svg>
+              </button>
+            </div>
+          )
+        }
+      </div>
     </div>
 
-    {sortedProjects.length > 6 && (
-      <div class="mt-20 text-center">
-        <a href="/portfolio" class="inline-block px-12 py-4 border border-white/10 hover:border-neon-secondary hover:text-neon-secondary transition-all duration-300 font-bold uppercase tracking-[0.3em] text-xs">
-          Ver Todos los Proyectos
-        </a>
-      </div>
-    )}
+    <div class="mt-20 text-center">
+      <a
+        id="view-all-link"
+        href="/portfolio?category=corporate"
+        class="inline-block px-12 py-4 border border-white/10 hover:border-neon-primary hover:text-neon-primary transition-all duration-300 font-bold uppercase tracking-[0.3em] text-xs"
+      >
+        Ver todas las imágenes
+      </a>
+    </div>
   </div>
 </section>
+
+<Lightbox />
 
 <style>
   @reference "../styles/global.css";
 
   .filter-btn.active {
     @apply bg-white/10 text-white border border-white/10;
-    text-shadow: 0 0 10px rgba(255,255,255,0.3);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
   }
 </style>
 
 <script>
-  // Vanilla JS logic for filtering
-  const setupFilters = () => {
-    const buttons = document.querySelectorAll('.filter-btn');
-    const items = document.querySelectorAll('.portfolio-item');
+  const initPortfolio = () => {
+    // 1. Tab Switching
+    const filterBtns = document.querySelectorAll(".filter-btn");
+    const sections = document.querySelectorAll(".carousel-section");
+    const viewAllLink = document.getElementById(
+      "view-all-link",
+    ) as HTMLAnchorElement;
 
-    buttons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        // Active state
-        buttons.forEach(b => b.classList.remove('active', 'bg-gray-800', 'bg-white', 'text-black', 'bg-neon-primary'));
-        // Re-apply basic styles based on filter type to maintain consistent look? 
-        // For now just toggle 'active' class styling handled by CSS or class manipulation:
-        btn.classList.add('bg-white', 'text-black'); 
-        // (Simplified - styling needs to be robust)
-        
-        const filter = btn.getAttribute('data-filter');
-        
-        items.forEach((item) => {
-           const htmlItem = item as HTMLElement;
-           const type = htmlItem.getAttribute('data-type');
-           
-           if (filter === 'all' || filter === type) {
-             htmlItem.style.display = 'block';
-             // optional animation here
-           } else {
-             htmlItem.style.display = 'none';
-           }
+    filterBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const filter = btn.getAttribute("data-filter");
+
+        // Update Buttons
+        filterBtns.forEach((b) =>
+          b.classList.remove("active", "bg-white/10", "text-white"),
+        );
+        btn.classList.add("active", "bg-white/10", "text-white");
+
+        // Update Sections
+        sections.forEach((section) => {
+          if (section.id === `${filter}-carousel`) {
+            section.classList.remove("hidden");
+            section.classList.add("block");
+            // Reset opacity to ensure visibility
+            setTimeout(() => {
+              section.classList.remove("opacity-0");
+              section.classList.add("opacity-100");
+            }, 10);
+
+            // Allow carousel track to recalculate if needed
+            const track = section.querySelector(
+              ".carousel-track",
+            ) as HTMLElement;
+            if (track) track.style.transform = "translateX(0%)";
+          } else {
+            section.classList.remove("block");
+            section.classList.add("hidden");
+          }
         });
+
+        // Update View All Link
+        if (viewAllLink) {
+          viewAllLink.href = `/portfolio?category=${filter}`;
+        }
       });
     });
+
+    // 3. Force Initial State (Fix for Navigation)
+    const activeBtn = document.querySelector(".filter-btn.active");
+    if (activeBtn) {
+      const filter = activeBtn.getAttribute("data-filter");
+      sections.forEach((section) => {
+        if (section.id === `${filter}-carousel`) {
+          section.classList.remove("hidden");
+          section.classList.add("block");
+        } else {
+          section.classList.remove("block");
+          section.classList.add("hidden");
+        }
+      });
+    }
+
+    // 2. Carousel Logic
+    const initCarousel = (sectionId: string) => {
+      const section = document.getElementById(sectionId);
+      if (!section) return;
+
+      const track = section.querySelector(".carousel-track") as HTMLElement;
+      const prevBtn = section.querySelector(".nav-btn.prev");
+      const nextBtn = section.querySelector(".nav-btn.next");
+
+      if (!track || !prevBtn || !nextBtn) return;
+
+      let currentSlide = 0;
+
+      const updateSlide = () => {
+        track.style.transform = `translateX(-${currentSlide * 100}%)`;
+      };
+
+      prevBtn.addEventListener("click", () => {
+        if (currentSlide > 0) {
+          currentSlide--;
+          updateSlide();
+        }
+      });
+
+      nextBtn.addEventListener("click", () => {
+        // Assuming max 2 slides (index 0 and 1) for now based on strict "3 visible, 6 total"
+        if (currentSlide < 1) {
+          currentSlide++;
+          updateSlide();
+        }
+      });
+    };
+
+    initCarousel("corporate-carousel");
+    initCarousel("event-carousel");
   };
 
-  // Run on load and after ViewTransitions swap
-  document.addEventListener('astro:page-load', setupFilters);
+  document.addEventListener("astro:page-load", initPortfolio);
 </script>

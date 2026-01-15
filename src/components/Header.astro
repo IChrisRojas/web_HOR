@@ -1,13 +1,14 @@
 ---
 import { getR2AssetUrl } from "../utils/r2";
 
-const logoWhite = getR2AssetUrl("logos/logo-SL.png");
-const logoBlack = getR2AssetUrl("logos/logo-black-SL.png");
+const logoWhite = getR2AssetUrl("logos/logo-SL.webp");
+const logoBlack = getR2AssetUrl("logos/logo-black-SL.webp");
 ---
 
 <header
   id="main-header"
   class="fixed top-0 left-0 w-full z-50 transition-all duration-500 py-4"
+  transition:persist
 >
   <div
     class="container mx-auto px-6 flex justify-between items-center transition-all duration-500 font-display uppercase tracking-widest text-sm"
@@ -39,7 +40,7 @@ const logoBlack = getR2AssetUrl("logos/logo-black-SL.png");
         >Servicios</a
       >
       <a href="/#portfolio" class="hover:text-neon-primary transition-colors"
-        >Portfolio</a
+        >Portafolio</a
       >
       <a href="/#contact" class="hover:text-neon-primary transition-colors"
         >Contacto</a
@@ -47,7 +48,7 @@ const logoBlack = getR2AssetUrl("logos/logo-black-SL.png");
     </nav>
 
     <button
-      class="md:hidden mobile-menu-btn relative z-50 p-2 text-current"
+      class="hidden mobile-menu-btn relative z-50 p-2 text-current"
       aria-label="Toggle Menu"
     >
       <div
@@ -77,7 +78,8 @@ const logoBlack = getR2AssetUrl("logos/logo-black-SL.png");
     >
     <a
       href="/#portfolio"
-      class="mobile-link hover:text-neon-primary transition-colors">Portfolio</a
+      class="mobile-link hover:text-neon-primary transition-colors"
+      >Portafolio</a
     >
     <a
       href="/#contact"

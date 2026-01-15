@@ -1,7 +1,7 @@
 ---
 import { getR2AssetUrl } from "../utils/r2";
 
-const logoWhite = getR2AssetUrl("logos/logo-SL.png");
+const logoWhite = getR2AssetUrl("logos/logo-SL.webp");
 ---
 
 <section
@@ -78,7 +78,7 @@ const logoWhite = getR2AssetUrl("logos/logo-SL.png");
       </a>
 
       <a
-        href="#portfolio"
+        href="/portfolio"
         class="px-10 py-4 glass border border-white/20 text-white font-bold text-lg rounded-sm hover:bg-white hover:text-black transition-all duration-300"
       >
         VER PORTAFOLIO
@@ -88,7 +88,7 @@ const logoWhite = getR2AssetUrl("logos/logo-SL.png");
 
   <!-- Scroll Indicator -->
   <div
-    class="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 group cursor-pointer animate-bounce-slow"
+    class="hidden md:block absolute bottom-10 left-1/2 -translate-x-1/2 z-30 group cursor-pointer animate-bounce-slow"
   >
     <div
       class="relative w-5 h-8 border-2 border-white/20 rounded-full flex justify-center p-1 group-hover:border-neon-primary/50 transition-colors duration-300"
@@ -159,25 +159,38 @@ const logoWhite = getR2AssetUrl("logos/logo-SL.png");
 </style>
 
 <script>
-  const handleHeroLogoScroll = () => {
+  const handleHeroEffects = () => {
+    // 1. Logo Scroll Effect
     const heroLogo = document.querySelector(
       ".hero-logo-container",
     ) as HTMLElement;
-    if (!heroLogo) return;
 
-    const onScroll = () => {
-      const scrollPos = window.scrollY;
-      const opacity = Math.max(0, 1 - scrollPos / 400);
-      const scale = Math.max(0.8, 1 - scrollPos / 1000);
-      const translateY = scrollPos * 0.2; // Slight parallax
+    if (heroLogo) {
+      const onScroll = () => {
+        const scrollPos = window.scrollY;
+        const opacity = Math.max(0, 1 - scrollPos / 400);
+        const scale = Math.max(0.8, 1 - scrollPos / 1000);
+        const translateY = scrollPos * 0.2; // Slight parallax
 
-      heroLogo.style.opacity = opacity.toString();
-      heroLogo.style.transform = `scale(${scale}) translateY(${translateY}px)`;
-    };
+        heroLogo.style.opacity = opacity.toString();
+        heroLogo.style.transform = `scale(${scale}) translateY(${translateY}px)`;
+      };
+      window.addEventListener("scroll", onScroll);
+      onScroll();
+    }
 
-    window.addEventListener("scroll", onScroll);
-    onScroll();
+    // 2. Force Video Autoplay (Fix for ViewTransitions)
+    const video = document.querySelector("video") as HTMLVideoElement;
+    if (video) {
+      video.muted = true; // Ensure muted for autoplay policy
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((error) => {
+          console.log("Auto-play was prevented. Interaction required.");
+        });
+      }
+    }
   };
 
-  document.addEventListener("astro:page-load", handleHeroLogoScroll);
+  document.addEventListener("astro:page-load", handleHeroEffects);
 </script>

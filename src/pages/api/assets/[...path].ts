@@ -8,30 +8,40 @@ export const GET: APIRoute = async ({ params, locals }) => {
         return new Response(null, { status: 404 });
     }
 
-    // Access the R2 bucket from the Cloudflare runtime environment
-    const bucket = locals.runtime?.env?.BUCKET;
-
-    if (!bucket) {
-        console.error('BUCKET binding not found');
-        return new Response('Server Configuration Error: BUCKET binding missing', { status: 500 });
-    }
-
     try {
-        const object = await bucket.get(path);
-
-        if (!object) {
-            return new Response(null, { status: 404 });
+        const bucket = locals.runtime?.env?.BUCKET;
+        if (bucket) {
+            const object = await bucket.get(path);
+            if (object) {
+                const headers = new Headers();
+                object.writeHttpMetadata(headers);
+                headers.set('etag', object.httpEtag);
+                return new Response(object.body, { headers });
+            }
         }
-
-        const headers = new Headers();
-        object.writeHttpMetadata(headers);
-        headers.set('etag', object.httpEtag);
-
-        return new Response(object.body, {
-            headers,
-        });
     } catch (error) {
-        console.error(`Error fetching ${path} from R2:`, error);
-        return new Response('Internal Server Error', { status: 500 });
+        console.warn(`Local R2 binding failed for ${path}, attempting fallback...`, error);
     }
+
+    // Fallback: Fetch from public R2 domain
+    const publicDomain = import.meta.env.PUBLIC_R2_DOMAIN || process.env.PUBLIC_R2_DOMAIN;
+    if (publicDomain) {
+        try {
+            const url = `${publicDomain}/${path}`;
+            const response = await fetch(url);
+            if (response.ok) {
+                const newHeaders = new Headers(response.headers);
+                // Cache for 1 year, immutable
+                newHeaders.set('Cache-Control', 'public, max-age=31536000, immutable');
+
+                return new Response(response.body, {
+                    headers: newHeaders
+                });
+            }
+        } catch (error) {
+            console.error(`Fallback fetch failed for ${path}:`, error);
+        }
+    }
+
+    return new Response(null, { status: 404 });
 };

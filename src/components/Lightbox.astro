@@ -1,0 +1,159 @@
+---
+
+---
+
+<div
+    id="lightbox-modal"
+    class="fixed inset-0 z-[100] hidden opacity-0 transition-opacity duration-300 bg-black/95 backdrop-blur-xl flex items-center justify-center p-4"
+>
+    <!-- Close Button -->
+    <button
+        id="lightbox-close"
+        class="absolute top-6 right-6 text-white/50 hover:text-white transition-colors z-60 focus:outline-hidden"
+        aria-label="Close lightbox"
+    >
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="40"
+            height="40"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+        >
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+    </button>
+
+    <!-- Content Container -->
+    <div
+        id="lightbox-content"
+        class="relative w-full max-w-7xl max-h-[90vh] flex items-center justify-center overflow-hidden scale-90 transition-all duration-300 ease-out"
+    >
+        <!-- Image Display -->
+        <img
+            id="lightbox-img"
+            class="max-w-full max-h-[90vh] object-contain hidden shadow-2xl shadow-neon-primary/10 rounded-xs"
+            src=""
+            alt="Project Preview"
+        />
+
+        <!-- Video Display -->
+        <video
+            id="lightbox-video"
+            class="max-w-full max-h-[90vh] object-contain hidden shadow-2xl shadow-neon-primary/10 rounded-xs"
+            controls
+            autoplay
+            playsinline
+            src=""></video>
+
+        <!-- Info Overlay (Optional) -->
+        <div
+            id="lightbox-info"
+            class="absolute bottom-4 left-4 right-4 text-center pointer-events-none opacity-0 transition-opacity"
+        >
+            <h3
+                id="lightbox-title"
+                class="text-white font-display text-xl uppercase tracking-wider"
+            >
+            </h3>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Global Lightbox Logic
+    const initLightbox = () => {
+        const modal = document.getElementById("lightbox-modal");
+        const content = document.getElementById("lightbox-content");
+        const closeBtn = document.getElementById("lightbox-close");
+        const imgMsg = document.getElementById(
+            "lightbox-img",
+        ) as HTMLImageElement;
+        const videoElem = document.getElementById(
+            "lightbox-video",
+        ) as HTMLVideoElement;
+        const titleElem = document.getElementById("lightbox-title");
+
+        if (!modal || !content || !closeBtn || !imgMsg || !videoElem) return;
+
+        // Function to Open
+        (window as any).openLightbox = (
+            url: string,
+            type: "image" | "video",
+            title?: string,
+        ) => {
+            // Set content
+            if (type === "video") {
+                imgMsg.classList.add("hidden");
+                videoElem.src = url;
+                videoElem.classList.remove("hidden");
+                videoElem
+                    .play()
+                    .catch((e) => console.log("Autoplay blocked", e));
+            } else {
+                videoElem.pause();
+                videoElem.classList.add("hidden");
+                imgMsg.src = url;
+                imgMsg.classList.remove("hidden");
+            }
+
+            if (titleElem && title) {
+                titleElem.textContent = title;
+            }
+
+            // Show Modal
+            modal.classList.remove("hidden");
+            // Small delay for fade in and scale up
+            requestAnimationFrame(() => {
+                modal.classList.remove("opacity-0");
+                content.classList.remove("scale-90");
+                content.classList.add("scale-100");
+            });
+
+            document.body.style.overflow = "hidden"; // Lock scroll
+        };
+
+        // Function to Close
+        const closeLightbox = () => {
+            modal.classList.add("opacity-0");
+            content.classList.remove("scale-100");
+            content.classList.add("scale-90");
+
+            setTimeout(() => {
+                modal.classList.add("hidden");
+                // Reset src to stop video
+                videoElem.pause();
+                videoElem.src = "";
+                imgMsg.src = "";
+                document.body.style.overflow = ""; // Unlock scroll
+            }, 300);
+        };
+
+        closeBtn.addEventListener("click", closeLightbox);
+
+        // Close on background click
+        modal.addEventListener("click", (e) => {
+            if (e.target === modal) closeLightbox();
+        });
+
+        // Close on Escape
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape" && !modal.classList.contains("hidden")) {
+                closeLightbox();
+            }
+        });
+    };
+
+    // Run on load and transitions
+    document.addEventListener("astro:page-load", initLightbox);
+    // Fallback for initial load if not using ViewTransitions
+    if (document.readyState === "complete") {
+        initLightbox();
+    } else {
+        document.addEventListener("DOMContentLoaded", initLightbox);
+    }
+</script>
