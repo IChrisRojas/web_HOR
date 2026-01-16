@@ -117,18 +117,26 @@ const logoBlack = getR2AssetUrl("logos/logo-black-SL.webp");
 <style>
   @reference "../styles/global.css";
 
-  /* Header Themes */
+  /* Header Themes - Initial State (Transparent) */
   header.header-light {
-    @apply bg-white/90 border-b border-gray-200 text-black shadow-sm;
+    @apply text-black;
   }
 
   header.header-dark {
-    @apply bg-black/40 border-b border-white/5 text-white backdrop-blur-xl;
+    @apply text-white;
   }
 
-  /* Scrolled State */
+  /* Scrolled State - Apply Backgrounds */
   header.header-scrolled {
-    @apply py-2;
+    @apply py-2 shadow-sm;
+  }
+
+  header.header-scrolled.header-light {
+    @apply bg-white/90 border-b border-gray-200;
+  }
+
+  header.header-scrolled.header-dark {
+    @apply bg-black/40 border-b border-white/5 backdrop-blur-xl;
   }
 
   header.header-scrolled #logo-container {
